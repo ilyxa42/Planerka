@@ -169,6 +169,58 @@ body.searching .appbar h1,body.searching .appbar .sq,body.searching .icb.hide-s{
 .due.bad{color:var(--red);font-weight:600}
 .due.soon{color:var(--amber);font-weight:600}
 
+/* ======= главное меню ======= */
+.mgrp{margin-bottom:16px}
+.mgrp h4{font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;
+  margin:0 0 8px;padding:0 4px}
+.mrow{display:flex;gap:12px;align-items:center;width:100%;padding:14px 16px;border-top:1px solid var(--line);
+  background:none;border-left:0;border-right:0;border-bottom:0;cursor:pointer;text-align:left}
+.card>.mrow:first-child{border-top:0}
+.mrow:active{background:var(--soft)}
+.mrow .ic{width:40px;height:40px;border-radius:13px;background:var(--brand-soft);color:var(--brand);
+  display:grid;place-items:center;flex:none}
+.mrow.red .ic{background:var(--red-soft);color:var(--red)}
+.mrow.green .ic{background:var(--green-soft);color:var(--green)}
+.mrow.gray .ic{background:var(--soft-2);color:var(--ink-2)}
+.mrow b{flex:1;font-size:15.5px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mrow .ct{font-size:12.5px;color:var(--ink-3);font-variant-numeric:tabular-nums;background:var(--soft-2);
+  border-radius:999px;padding:3px 10px;font-weight:600}
+.mrow .ct.hot{background:var(--red);color:#fff}
+.mrow .chev{color:var(--line-2);flex:none}
+
+/* ======= отметка «выполнено» ======= */
+.dbtn{width:30px;height:30px;border-radius:50%;border:2px solid var(--line-2);background:#fff;display:grid;
+  place-items:center;flex:none;cursor:pointer;color:transparent;margin-top:1px}
+.dbtn:active{transform:scale(.93)}
+.row.done .dbtn{background:var(--green);border-color:var(--green);color:#fff}
+.row:not(.done) .dbtn:hover{border-color:var(--green);color:#bcd8cd}
+
+/* ======= сортировка ======= */
+.sortbar{display:flex;gap:7px;padding:11px 14px;align-items:center;flex-wrap:wrap;background:var(--soft);
+  border-top:1px solid var(--line)}
+.sortbar span{font-size:12px;color:var(--ink-3);margin-right:2px}
+.sc{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-size:13px;
+  color:var(--ink-2);cursor:pointer;font-weight:500}
+.sc.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+
+/* ======= неделя ======= */
+.wkbar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.wkbar .tt{font-size:14.5px;font-weight:600;flex:1;min-width:120px}
+.wkbar input[type=date]{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 11px;
+  font-size:14px;max-width:170px}
+.wk{display:grid;gap:12px}
+.wday{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--s1)}
+.wday.tdy{border-color:var(--brand)}
+.wdh{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--soft)}
+.wday.tdy .wdh{background:var(--brand-soft)}
+.wdh b{font-size:15px;text-transform:capitalize}
+.wday.tdy .wdh b{color:var(--brand)}
+.wdh .dt{font-size:12.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.wdh .cnt{margin-left:auto;font-size:12px;color:var(--ink-3)}
+.wdh .add{width:34px;height:34px;border-radius:11px;border:1px solid var(--line);background:var(--card);
+  display:grid;place-items:center;color:var(--brand);font-size:21px;line-height:1;cursor:pointer;flex:none}
+.wempty{padding:13px 14px;font-size:13px;color:var(--ink-3)}
+
 /* ======= календарь ======= */
 .cal{padding:14px 14px 18px}
 .calbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
@@ -347,7 +399,9 @@ dialog::backdrop{background:rgba(15,22,45,.5);backdrop-filter:blur(3px)}
 
   <main>
     <div class="appbar">
-      <span class="sq"><svg width="18" height="18" viewBox="0 0 100 100" aria-hidden="true"><path d="M32 26v24a18 18 0 0036 0V26" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="70" cy="70" r="10" fill="none" stroke="#fff" stroke-width="8"/></svg></span>
+      <button class="icb" id="mBack" hidden aria-label="Назад">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button>
+      <span class="sq" id="mLogo"><svg width="18" height="18" viewBox="0 0 100 100" aria-hidden="true"><path d="M32 26v24a18 18 0 0036 0V26" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="70" cy="70" r="10" fill="none" stroke="#fff" stroke-width="8"/></svg></span>
       <h1 id="mobTitle">Сводка дня</h1>
       <div class="searchwrap"><input type="search" id="q" placeholder="Поиск: ребёнок, дело, диагноз…" aria-label="Поиск"></div>
       <button class="icb hide-s" id="mSearch" aria-label="Поиск">
@@ -457,12 +511,13 @@ const I={dash:'<path d="M4 13h7V4H4zM13 20h7v-9h-7zM13 8h7V4h-7zM4 20h7v-4H4z"/>
  heart:'<path d="M12 20s-7-4.4-7-9.3A3.9 3.9 0 0 1 12 8a3.9 3.9 0 0 1 7 2.7C19 15.6 12 20 12 20z"/>',
  done:'<path d="M20 6 9 17l-5-5"/>',
  set:'<circle cx="12" cy="12" r="3.2"/><path d="M4.6 12c0-.4 0-.8.1-1.2l-2-1.5 2-3.4 2.3 1c.6-.5 1.3-.9 2-1.2L11.4 3h4l.4 2.7c.7.3 1.4.7 2 1.2l2.3-1 2 3.4-2 1.5c.1.8.1 1.6 0 2.4l2 1.5-2 3.4-2.3-1c-.6.5-1.3.9-2 1.2l-.4 2.7h-4l-.4-2.7c-.7-.3-1.4-.7-2-1.2l-2.3 1-2-3.4 2-1.5c-.1-.4-.1-.8-.1-1.2z"/>',
+ home:'<path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/>',
  more:'<circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/>'};
 const ic=(k,s)=>'<svg width="'+(s||19)+'" height="'+(s||19)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+I[k]+'</svg>';
 
 let D={meta:{doctor:"Алёшина Татьяна Алексеевна",short:"Алёшина Т. А.",uch:"6",
   clinic:"Губкинская городская больница",nurse:""},tasks:[],pats:[]};
-let view="dash",q="",calM=null,selDay="",editT=null,editP=null;
+let view="home",q="",calM=null,selDay="",editT=null,editP=null,wkDate=null;
 
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -494,9 +549,10 @@ function toast(m,u){
   setTimeout(()=>{if(el.parentNode)el.remove();},5500);
 }
 
-const NAV=[["Обзор",[["dash","Сводка дня","dash"],["urgent","Срочно","urgent"],["plan","План по датам","plan"],["cal","Календарь","cal"]]],
+const NAVG=()=>[["Обзор",[["dash","Сводка дня","dash"],["urgent","Срочно","urgent"],["plan","План по датам","plan"],
+  ["week","Неделя по дням","cal"],["cal","Календарь","cal"]]],
  ["Направления и документы",CATS.map(c=>[c[0],c[1],"folder"])],
- ["Наблюдение",[["disp","Диспансерные","users"],["inv","Дети-инвалиды","heart"]]],
+ ["Участок №"+D.meta.uch,[["disp","Диспансерные","users"],["inv","Дети-инвалиды","heart"]]],
  ["Прочее",[["done","Выполнено","done"],["data","Данные и настройки","set"]]]];
 const open_=()=>D.tasks.filter(t=>!t.done);
 function counts(){
@@ -506,14 +562,16 @@ function counts(){
 }
 function navHTML(){
   const c=counts();
-  return NAV.map(g=>'<div class="grp"><h4>'+g[0]+'</h4>'+g[1].map(it=>
+  return '<div class="grp"><button class="nav" data-go="home" aria-current="'+(view==="home")+'">'+ic("home")+
+   '<em>Главная</em></button></div>'+
+   NAVG().map(g=>'<div class="grp"><h4>'+g[0]+'</h4>'+g[1].map(it=>
    '<button class="nav" data-go="'+it[0]+'" aria-current="'+(view===it[0])+'">'+ic(it[2])+'<em>'+it[1]+'</em>'+
    (c[it[0]]?'<span class="ct'+(it[0]==="urgent"?" hot":"")+'">'+c[it[0]]+'</span>':"")+'</button>').join("")+'</div>').join("");
 }
 function tabsHTML(){
   const c=counts();
-  const T=[["dash","Сводка","dash",0],["urgent","Срочно","urgent",c.urgent],["plan","План","plan",0],
-    ["disp","Учёт","users",0],["more","Ещё","more",0]];
+  const T=[["home","Главная","home",0],["dash","Сводка","dash",0],["plan","План","plan",c.urgent],
+    ["week","Неделя","cal",0],["disp","Участок","users",0]];
   return T.map(t=>'<button class="tab" data-tab="'+t[0]+'" aria-current="'+(view===t[0])+'">'+ic(t[2],22)+
    '<span>'+t[1]+'</span>'+(t[3]?'<span class="bd2">'+t[3]+'</span>':"")+'</button>').join("");
 }
@@ -523,7 +581,8 @@ function row(t){
   const ov=over(t),sn=!ov&&isTd(t);
   const when=t.date?fmt(t.date)+(t.time?", до "+t.time:""):"без срока";
   return '<div class="row'+(t.urgent&&!t.done?" urg":"")+(ov?" ovr":"")+(t.done?" done":"")+'" data-open="'+t.id+'">'+
-  '<input class="cbx" type="checkbox" data-done="'+t.id+'" '+(t.done?"checked":"")+' aria-label="Выполнено">'+
+  '<button class="dbtn" type="button" data-done="'+t.id+'" aria-pressed="'+(!!t.done)+'" title="Выполнено" aria-label="Отметить выполненным">'+
+  '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button>'+
   '<div class="bd"><p class="ttl"><span class="who">'+esc(t.fio)+'</span> — '+esc(t.text)+'</p>'+
   '<p class="meta"><span class="tag">'+esc(CN[t.cat]||"Прочее")+'</span>'+
   '<span class="when num'+(ov?" o":sn?" s":"")+'">'+when+(ov?" · просрочено":"")+'</span>'+
@@ -537,6 +596,29 @@ const sortT=(a,b)=>{
   if(ad!==bd)return ad<bd?-1:1;
   return (a.time||"99:99")<(b.time||"99:99")?-1:1;};
 const emptyBox=(t,s)=>'<div class="empty"><div class="ring">'+ic("done",22)+'</div><b>'+t+'</b>'+s+'</div>';
+const byAbc=(a,b)=>(a.fio||"").localeCompare(b.fio||"","ru");
+function sortTasks(arr){
+  const m=D.meta.sortT||"date";
+  if(m==="abc")return arr.sort((a,b)=>byAbc(a,b)||sortT(a,b));
+  if(m==="cat")return arr.sort((a,b)=>(CN[a.cat]||"").localeCompare(CN[b.cat]||"","ru")||sortT(a,b));
+  return arr.sort(sortT);
+}
+function sortBarT(){
+  const m=D.meta.sortT||"date";
+  const b=(k,n)=>'<button class="sc'+(m===k?" on":"")+'" data-sort="'+k+'">'+n+'</button>';
+  return '<div class="sortbar"><span>Сортировка:</span>'+b("date","По дате")+b("abc","По алфавиту")+b("cat","По разделам")+'</div>';
+}
+function sortPats(arr){
+  const m=D.meta.sortP||"abc";
+  if(m==="visit")return arr.sort((a,b)=>(a.nextVisit||"9999")<(b.nextVisit||"9999")?-1:1);
+  if(m==="mkb")return arr.sort((a,b)=>(a.mkb||"яя").localeCompare(b.mkb||"яя","ru")||byAbc(a,b));
+  return arr.sort(byAbc);
+}
+function sortBarP(){
+  const m=D.meta.sortP||"abc";
+  const b=(k,n)=>'<button class="sc'+(m===k?" on":"")+'" data-sortp="'+k+'">'+n+'</button>';
+  return '<div class="sortbar"><span>Сортировка:</span>'+b("abc","По алфавиту")+b("visit","По дате приёма")+b("mkb","По диагнозу")+'</div>';
+}
 function qa(cat){
   return '<form class="qa" id="qaForm" autocomplete="off">'+
   '<input class="c4" name="fio" list="fioList" placeholder="ФИО ребёнка" required>'+
@@ -560,6 +642,25 @@ function list(arr,grouped){
 }
 
 /* ---- экраны ---- */
+function vHome(){
+  const o=open_(),c=counts();
+  const ov=o.filter(over).length,td=o.filter(isTd).length;
+  const tone={dash:"",urgent:"red",plan:"",week:"",cal:"",disp:"green",inv:"green",done:"gray",data:"gray"};
+  const chev='<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>';
+  const groups=NAVG().map(g=>'<div class="mgrp"><h4>'+g[0]+'</h4><div class="card">'+
+    g[1].map(it=>'<button class="mrow '+(tone[it[0]]||(CN[it[0]]?"gray":""))+'" data-go="'+it[0]+'">'+
+      '<span class="ic">'+ic(it[2],19)+'</span><b>'+it[1]+'</b>'+
+      (c[it[0]]?'<span class="ct'+(it[0]==="urgent"?" hot":"")+'">'+c[it[0]]+'</span>':"")+chev+'</button>').join("")+
+    '</div></div>').join("");
+  return '<div class="vh"><div><h2>Планер</h2></div></div>'+
+   '<section class="hero"><p class="day">'+niceDate()+'</p><h2>'+hello()+'</h2>'+
+   '<p class="who">'+esc(D.meta.doctor)+' · участок №'+esc(D.meta.uch)+'</p>'+
+   '<div class="hstats">'+
+    '<button class="hs" data-go="urgent"><div class="n">'+c.urgent+'</div><div class="l">срочно</div></button>'+
+    '<button class="hs" data-go="plan"><div class="n">'+ov+'</div><div class="l">просрочено</div></button>'+
+    '<button class="hs" data-go="plan"><div class="n">'+td+'</div><div class="l">на сегодня</div></button>'+
+   '</div></section>'+groups;
+}
 function vDash(){
   const o=open_(),c=counts(),t1=TODAY();
   const ov=o.filter(over),td=o.filter(isTd),wk=o.filter(t=>t.date&&t.date>t1&&t.date<=shift(7));
@@ -572,15 +673,15 @@ function vDash(){
     '<button class="hs" data-go="urgent"><div class="n">'+c.urgent+'</div><div class="l">срочно</div></button>'+
     '<button class="hs" data-go="plan"><div class="n">'+ov.length+'</div><div class="l">просрочено</div></button>'+
     '<button class="hs" data-go="plan"><div class="n">'+td.length+'</div><div class="l">на сегодня</div></button>'+
-    '<button class="hs only-desk" data-go="cal"><div class="n">'+wk.length+'</div><div class="l">на неделю</div></button>'+
+    '<button class="hs only-desk" data-go="week"><div class="n">'+wk.length+'</div><div class="l">на неделю</div></button>'+
     '<button class="hs only-desk" data-go="disp"><div class="n">'+c.disp+'</div><div class="l">на Д-учёте</div></button>'+
     '<button class="hs only-desk" data-go="inv"><div class="n">'+c.inv+'</div><div class="l">инвалиды</div></button>'+
    '</div></section>'+
   '<div class="mini2">'+
-   '<button class="mtile b" data-go="cal"><span class="ico">'+ic("cal",19)+'</span><span><span class="n">'+wk.length+
-    '</span><span class="l">на ближайшую неделю</span></span></button>'+
+   '<button class="mtile b" data-go="week"><span class="ico">'+ic("cal",19)+'</span><span><span class="n">'+wk.length+
+    '</span><span class="l">неделя по дням</span></span></button>'+
    '<button class="mtile" data-go="disp"><span class="ico">'+ic("users",19)+'</span><span><span class="n">'+(c.disp+c.inv)+
-    '</span><span class="l">детей под наблюдением</span></span></button></div>'+
+    '</span><span class="l">участок №'+esc(D.meta.uch)+'</span></span></button></div>'+
   '<div class="card"><div class="ch"><div><h3>Сегодня и просроченное</h3><p>Галочка закрывает дело</p></div>'+
    '<button class="lnk" data-go="plan">Весь план</button></div>'+
    (ov.length+td.length?list(ov.concat(td).sort(sortT),false)
@@ -603,9 +704,33 @@ function vTasks(){
   else if(view==="plan"){arr=arr.filter(t=>!t.done);title="План по датам";hint="Открытые дела по срокам: к какому числу и к какому часу.";gr=true;}
   else if(view==="done"){arr=arr.filter(t=>t.done);title="Выполнено";hint="Снимите галочку, чтобы вернуть дело в работу.";}
   else{cat=view;arr=arr.filter(t=>!t.done&&t.cat===view);title=CN[view];hint="Дела этого раздела по срокам.";gr=true;}
-  arr.sort(sortT);
+  sortTasks(arr);
+  if((D.meta.sortT||"date")!=="date")gr=false;
   return '<div class="vh"><div><h2>'+title+'</h2><p>'+hint+' · '+arr.length+' в списке</p></div></div>'+
-   '<div class="card">'+(view==="done"?"":qa(cat))+list(arr,gr)+'</div>';
+   '<div class="card">'+(view==="done"?"":qa(cat))+sortBarT()+list(arr,gr)+'</div>';
+}
+function vWeek(){
+  const base=wkDate?new Date(wkDate):new Date();
+  const mon=new Date(base);mon.setDate(base.getDate()-((base.getDay()+6)%7));
+  const days=[];for(let i=0;i<7;i++){const d=new Date(mon);d.setDate(mon.getDate()+i);days.push(d);}
+  const last=days[6];
+  const title=mon.getDate()+" "+MONR[mon.getMonth()]+" — "+last.getDate()+" "+MONR[last.getMonth()];
+  const by={};open_().forEach(t=>{if(t.date)(by[t.date]=by[t.date]||[]).push(t);});
+  const blocks=days.map((d,i)=>{
+    const k=iso(d),arr=(by[k]||[]).sort(sortT);
+    return '<section class="wday'+(k===TODAY()?" tdy":"")+'">'+
+     '<div class="wdh"><b>'+["Понедельник","Вторник","Среда","Четверг","Пятница","Суббота","Воскресенье"][i]+'</b>'+
+     '<span class="dt">'+pad(d.getDate())+"."+pad(d.getMonth()+1)+(k===TODAY()?" · сегодня":"")+'</span>'+
+     '<span class="cnt">'+(arr.length?arr.length+" дел":"")+'</span>'+
+     '<button class="add" data-add="'+k+'" title="Добавить дело на этот день">＋</button></div>'+
+     (arr.length?'<div class="rows">'+arr.map(row).join("")+'</div>':'<p class="wempty">Дел нет — нажмите «＋», чтобы записать</p>')+
+     '</section>';
+  }).join("");
+  return '<div class="vh"><div><h2>Неделя по дням</h2><p>Понедельник — воскресенье. «＋» добавляет дело сразу на нужный день, дату можно выбрать вручную.</p></div></div>'+
+   '<div class="wkbar"><button class="btn btn-s" data-wk="-7">‹</button><span class="tt">'+title+'</span>'+
+   '<button class="btn btn-s" data-wk="7">›</button><button class="btn btn-s" data-wk="0">Текущая</button>'+
+   '<input type="date" id="wkPick" value="'+iso(base)+'" aria-label="Перейти к дате"></div>'+
+   '<div class="wk">'+blocks+'</div>';
 }
 function vCal(){
   const base=calM?new Date(calM+"-01"):new Date(),y=base.getFullYear(),m=base.getMonth();
@@ -638,12 +763,13 @@ function pRows(p){
    (g==="inv"?r("ИПРА",p.ipra):"")+r("Примечание",p.note)+'</div>';
 }
 function vReg(){
-  const g=view;const arr=D.pats.filter(p=>p.group===g).sort((a,b)=>(a.fio||"").localeCompare(b.fio||"","ru"));
-  return '<div class="vh"><div><h2>'+REGN[g]+'</h2><p>'+(g==="disp"
-    ?"Диагноз, приёмы, реабилитация, госпитализации."
-    :"Диагноз, сроки инвалидности, ИПРА, приёмы и реабилитация.")+' · '+arr.length+'</p></div>'+
-   '<div class="tools"><button class="btn btn-p" data-newpat="'+g+'">＋ Добавить ребёнка</button></div></div>'+
-   '<div class="card">'+(arr.length?
+  const g=view;const arr=sortPats(D.pats.filter(p=>p.group===g));
+  return '<div class="vh"><div><h2>'+REGN[g]+'</h2><p>Участок №'+esc(D.meta.uch)+' · '+(g==="disp"
+    ?"диагноз, приёмы, реабилитация, госпитализации"
+    :"диагноз, сроки инвалидности, ИПРА, приёмы и реабилитация")+' · '+arr.length+'</p></div>'+
+   '<div class="tools"><button class="btn btn-p" data-newpat="'+g+'">＋ Добавить ребёнка</button>'+
+   '<button class="btn" data-go="'+(g==="disp"?"inv":"disp")+'">'+(g==="disp"?"Дети-инвалиды":"Диспансерные")+'</button></div></div>'+
+   '<div class="card">'+sortBarP()+(arr.length?
     '<div class="plist">'+arr.map(p=>'<article class="pcard" data-editpat="'+p.id+'">'+
       '<div class="pc-h"><b>'+esc(p.fio)+'</b>'+(p.mkb?'<span class="mkbv">'+esc(p.mkb)+'</span>':"")+'</div>'+
       (p.dx?'<p class="pc-dx">'+esc(p.dx)+'</p>':"")+
@@ -720,13 +846,18 @@ function render(){
     .filter(Boolean).sort().map(f=>'<option value="'+esc(f)+'">').join("");
   const v=$("#view");
   if(q.trim())v.innerHTML=vSearch();
+  else if(view==="home")v.innerHTML=vHome();
   else if(view==="dash")v.innerHTML=vDash();
+  else if(view==="week")v.innerHTML=vWeek();
   else if(view==="cal")v.innerHTML=vCal();
   else if(view==="disp"||view==="inv")v.innerHTML=vReg();
   else if(view==="data")v.innerHTML=vData();
   else v.innerHTML=vTasks();
   const h2=$("#view h2");
   $("#mobTitle").textContent=h2?h2.textContent:"Планер";
+  const inner=view!=="home"||!!q.trim();
+  $("#mBack").hidden=!inner;
+  $("#mLogo").style.display=inner?"none":"";
   document.title=(h2?h2.textContent:"Планер")+" — планер педиатра";
 }
 function go(v){view=v;if(v!=="cal")selDay="";closeSearch();$("#sheet").classList.remove("on");
@@ -742,7 +873,14 @@ document.addEventListener("click",e=>{
   const g=e.target.closest("[data-go]");if(g){go(g.dataset.go);return;}
   const d=e.target.closest("[data-done]");
   if(d){const t=D.tasks.find(x=>x.id===d.dataset.done);
-    if(t){t.done=d.checked;t.doneAt=d.checked?new Date().toISOString():"";apply();}return;}
+    if(t){t.done=!t.done;t.doneAt=t.done?new Date().toISOString():"";apply();
+      toast(t.done?"Выполнено: "+t.text:"Возвращено в работу",()=>{t.done=!t.done;apply();});}return;}
+  const so=e.target.closest("[data-sort]");
+  if(so){D.meta.sortT=so.dataset.sort;apply();return;}
+  const sp2=e.target.closest("[data-sortp]");
+  if(sp2){D.meta.sortP=sp2.dataset.sortp;apply();return;}
+  const ad=e.target.closest("[data-add]");
+  if(ad){selDay=ad.dataset.add;openTask(null);return;}
   const s=e.target.closest("[data-snz]");
   if(s){const t=D.tasks.find(x=>x.id===s.dataset.snz);
     if(t){t.date=t.date&&t.date>=TODAY()?addDay(t.date):shift(1);apply();toast("Перенесено на "+fmt(t.date));}return;}
@@ -750,6 +888,10 @@ document.addEventListener("click",e=>{
   const np=e.target.closest("[data-newpat]");if(np){openPat(null,np.dataset.newpat);return;}
   const ep=e.target.closest("[data-editpat]");if(ep){openPat(ep.dataset.editpat);return;}
   const op=e.target.closest("[data-open]");if(op){openTask(op.dataset.open);return;}
+  const wk=e.target.closest("[data-wk]");
+  if(wk){const n=+wk.dataset.wk;
+    if(!n)wkDate=null;else{const b=wkDate?new Date(wkDate):new Date();b.setDate(b.getDate()+n);wkDate=iso(b);}
+    render();return;}
   const mo=e.target.closest("[data-mon]");
   if(mo){const b=new Date(calM+"-01");b.setMonth(b.getMonth()+ +mo.dataset.mon);
     calM=b.getFullYear()+"-"+pad(b.getMonth()+1);render();return;}
@@ -758,6 +900,7 @@ document.addEventListener("click",e=>{
   const tp=e.target.closest("[data-tpl]");
   if(tp){const f=$("#qaForm");if(f){f.text.value=tp.dataset.tpl;f.fio.focus();}return;}
   const id=e.target.id;
+  if(id==="mBack"||e.target.closest("#mBack")){if(q.trim()){closeSearch();render();}else go("home");return;}
   if(id==="printBtn"||id==="printBtn2"){window.print();return;}
   if(id==="mSearch"){document.body.classList.add("searching");$("#mClose").hidden=false;
     setTimeout(()=>$("#q").focus(),40);return;}
@@ -848,6 +991,7 @@ fP.addEventListener("submit",e=>{
 });
 
 document.addEventListener("change",e=>{
+  if(e.target.id==="wkPick"){if(e.target.value){wkDate=e.target.value;render();}return;}
   if(e.target.id!=="impFile")return;
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||!Array.isArray(o.tasks))throw 0;
